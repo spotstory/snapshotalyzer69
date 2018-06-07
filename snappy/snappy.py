@@ -85,13 +85,28 @@ def create_snapshots(project):
     "Snapshot EC2 instances"
 
     instances = filter_instances(project)
+
+    print("Snapshot instances for {0}".format(project or "All projects"))
     for i in instances:
+        # Skip terminated instances
+        if i.state['Name'] == 'shutting-down' or i.state['Name'] == 'terminated': continue
+
+        # Stop instance
+        print("Stopping {0}...".format(i.id))
+        i.stop()
+        i.wait_until_stopped()
+
+        # Snapshotting
         for v in i.volumes.all():
-            print("Creating snapshot of {0}".format(v.id))
-            v.create_snapshot(
-                Description = "Created by snappy",
-                DryRun = False
-            )
+            print("  Creating snapshot of {0}".format(v.id))
+            v.create_snapshot(Description = "  Created by snappy")
+
+        # Restart instance
+        print("Starting {0}...".format(i.id))
+        i.start()
+        i.wait_until_running()
+
+    print("Operation complete")
     return
 
 ## INSTANCES LIST
