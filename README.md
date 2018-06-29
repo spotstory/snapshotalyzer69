@@ -10,11 +10,11 @@ This project is a demo, and uses boto3 to manage AWS EC2 instance snapshots.
 
 snappy uses the configuration file created by the AWS CLI. e.g.
 
-'aws configure --profile snappy'
+`aws configure --profile snappy`
 
 ## Running
 
-'pipenv run python snappy/snappy.py <command> <--project=PROJECT>'
+`pipenv run python snappy/snappy.py <command> <--project=PROJECT>`
 
 *command* is instances, volumes or snapshot
 *sub-command* depends upon command
